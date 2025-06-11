@@ -11,8 +11,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 @Aspect
 @Component
@@ -36,18 +38,14 @@ public class AdminApiLoggingAspect {
         String requestUrl = httpServletRequest.getRequestURI();
 
         // 요청 본문
-        Annotation[][] parameterAnnotations = ((MethodSignature) joinPoint.getSignature()).getMethod().getParameterAnnotations();
-        Object[] args = joinPoint.getArgs();
-        Object requestBody = null;
-        for (int i = 0; i < parameterAnnotations.length; i++) {
-            for (Annotation annotation : parameterAnnotations[i]) {
-                if (annotation.annotationType().equals(RequestBody.class)) {
-                    requestBody = args[i];
-                    break;
-                }
-            }
-            if (requestBody != null) break;
-        }
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();   // 메서드
+        Object[] args = joinPoint.getArgs();                                        // 요청 인자 값
+        Object requestBody = IntStream.range(0, method.getParameterCount())
+                .filter(i -> Arrays.stream(method.getParameterAnnotations()[i])
+                        .anyMatch(a -> a.annotationType().equals(RequestBody.class)))   // RequestBody 찾기
+                .mapToObj(i -> args[i])
+                .findFirst()
+                .orElse(null);
 
         log.info(
             "[ADMIN API REQUEST] userId={}, url={}, time={}, requestBody={}",
