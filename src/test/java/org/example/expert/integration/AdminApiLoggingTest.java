@@ -1,7 +1,7 @@
 package org.example.expert.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.expert.config.JwtUtil;
+import org.example.expert.security.JwtUtil;
 import org.example.expert.domain.user.dto.request.UserRoleChangeRequest;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.service.UserAdminService;
