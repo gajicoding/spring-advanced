@@ -32,7 +32,7 @@ public class ManagerService {
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
         // 일정을 만든 유저
         User user = User.fromAuthUser(authUser);
-        Todo todo = todoService.getTodoOrThrow(todoId);
+        Todo todo = todoService.getTodoByIdOrThrow(todoId);
 
         if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
             throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
@@ -55,7 +55,7 @@ public class ManagerService {
 
     @Transactional(readOnly = true)
     public List<ManagerResponse> getManagers(long todoId) {
-        Todo todo = todoService.getTodoOrThrow(todoId);
+        Todo todo = todoService.getTodoByIdOrThrow(todoId);
 
         List<Manager> managerList = managerRepository.findByTodoIdWithUser(todo.getId());
 
@@ -74,7 +74,7 @@ public class ManagerService {
     public void deleteManager(long userId, long todoId, long managerId) {
         User user = userService.getUserByIdOrThrow(userId);
 
-        Todo todo = todoService.getTodoOrThrow(todoId);
+        Todo todo = todoService.getTodoByIdOrThrow(todoId);
 
         if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
             throw new InvalidRequestException("해당 일정을 만든 유저가 유효하지 않습니다.");
