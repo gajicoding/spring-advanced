@@ -46,7 +46,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getComments(long todoId) {
-        List<Comment> commentList = commentRepository.findByTodoIdWithUser(todoId);
+        List<Comment> commentList = commentRepository.findByTodoId(todoId);
 
         List<CommentResponse> dtoList = new ArrayList<>();
         for (Comment comment : commentList) {

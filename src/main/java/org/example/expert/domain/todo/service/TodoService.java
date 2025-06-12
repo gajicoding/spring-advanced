@@ -83,7 +83,7 @@ public class TodoService {
     /* 도메인 로직 분리 */
 
     public Todo getTodoByIdOrThrow(long todoId) {
-        return todoRepository.findByIdWithUser(todoId)
+        return todoRepository.findWithUserById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
     }
 }

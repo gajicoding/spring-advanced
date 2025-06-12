@@ -57,7 +57,7 @@ public class ManagerService {
     public List<ManagerResponse> getManagers(long todoId) {
         Todo todo = todoService.getTodoByIdOrThrow(todoId);
 
-        List<Manager> managerList = managerRepository.findByTodoIdWithUser(todo.getId());
+        List<Manager> managerList = managerRepository.findByTodoId(todo.getId());
 
         List<ManagerResponse> dtoList = new ArrayList<>();
         for (Manager manager : managerList) {
