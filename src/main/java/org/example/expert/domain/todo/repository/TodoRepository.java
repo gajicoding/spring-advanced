@@ -16,5 +16,4 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     @EntityGraph(attributePaths = {"user"})
     Optional<Todo> findWithUserById(Long todoId);
 
-    int countById(Long todoId);
 }
